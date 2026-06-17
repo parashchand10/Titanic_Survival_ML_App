@@ -73,7 +73,7 @@ with col2:
         
         st.markdown(f"""
             <div class="result-box">
-                <h1 style="color: {color}; font-size: 60px; font-weight: 500;">{status}</h1>
+                <h1 style="color: {color}; font-size: 60px; font-weight: 900;">{status}</h1>
             </div>
             """, unsafe_allow_html=True)
     
