@@ -139,7 +139,7 @@ st.markdown("""
 # ---------------- Hero Header ----------------
 st.markdown("""
     <div class="hero">
-        <h1>🚢 Titanic Survival Prediction</h1>
+        <h1>Titanic Survival Prediction</h1>
         <p>Enter passenger details to estimate the likelihood of survival, powered by a Decision Tree model.</p>
     </div>
 """, unsafe_allow_html=True)
@@ -167,7 +167,7 @@ with col1:
 
 with col2:
     with st.container(border=True):
-        st.markdown('<div class="card-title">📊 Prediction Result</div>', unsafe_allow_html=True)
+        st.markdown('<div class="card-title">Prediction Result</div>', unsafe_allow_html=True)
 
         # Preprocessing
         is_female = 1 if gender == "Female" else 0
@@ -191,7 +191,7 @@ with col2:
             status = "SURVIVED" if survived else "NOT SURVIVED"
             color = "#28a745" if survived else "#dc3545"
             bg = "#eafaf0" if survived else "#fdecee"
-            icon = "✅" if survived else "❌"
+            icon = "" if survived else ""
 
             st.markdown(f"""
                 <div class="result-box" style="background-color: {bg};">
