@@ -25,7 +25,7 @@ st.markdown("""
     }
     #MainMenu, footer, header {visibility: hidden;}
     .block-container {
-        padding-top: 0.5rem !important;
+        padding-top: 0 rem !important;
     }
 
     /* App title / hero */
