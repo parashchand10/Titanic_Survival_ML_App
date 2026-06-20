@@ -25,7 +25,7 @@ st.markdown("""
     }
     #MainMenu, footer, header {visibility: hidden;}
     .block-container {
-        padding-top: 0.1rem !important;
+        padding-top: 1.5rem !important;
     }
 
     /* App title / hero */
@@ -54,6 +54,10 @@ st.markdown("""
         background-color: #ffffff;
         border-radius: 14px !important;
         box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    }
+    div[data-testid="stVerticalBlockBorderWrapper"] > div > div[data-testid="stVerticalBlock"] {
+        padding: 14px 10px 6px 10px;
+        min-height: 560px;
     }
     .card-title {
         font-size: 18px;
@@ -145,13 +149,13 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ---------------- Layout ----------------
-col1, col2 = st.columns([1, 1.4], gap="large")
+col1, col2 = st.columns([1.3, 1.4], gap="large")
 
 with col1:
     with st.container(border=True):
         st.markdown('<div class="card-title">🧍 Passenger Details</div>', unsafe_allow_html=True)
 
-        c1, c2 = st.columns(2)
+        c1, c2 = st.columns(2, gap="medium")
         with c1:
             age = st.slider("Age", 0, 80, 25)
             gender = st.selectbox("Gender", ["Male", "Female"])
