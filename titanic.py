@@ -24,12 +24,15 @@ st.markdown("""
         background-color: #f7f8fa;
     }
     #MainMenu, footer, header {visibility: hidden;}
+    .block-container {
+        padding-top: 1.5rem !important;
+    }
 
     /* App title / hero */
     .hero {
         padding: 18px 0 6px 0;
         border-bottom: 1px solid #e6e8eb;
-        margin-bottom: 18px;
+        margin-bottom: 24px;
     }
     .hero {
         text-align: center;
