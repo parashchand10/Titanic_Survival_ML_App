@@ -144,7 +144,7 @@ st.markdown("""
 st.markdown("""
     <div class="hero">
         <h1>Titanic Survival Prediction</h1>
-    </div>
+       </div>
 """, unsafe_allow_html=True)
 
 # ---------------- Layout ----------------
