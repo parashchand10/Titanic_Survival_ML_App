@@ -31,6 +31,9 @@ st.markdown("""
         border-bottom: 1px solid #e6e8eb;
         margin-bottom: 24px;
     }
+    .hero {
+        text-align: center;
+    }
     .hero h1 {
         font-size: 34px;
         font-weight: 800;
@@ -43,19 +46,17 @@ st.markdown("""
         margin-top: 0;
     }
 
-    /* Card containers */
-    .card {
+    /* Card container (st.container border=True) */
+    div[data-testid="stVerticalBlockBorderWrapper"] {
         background-color: #ffffff;
-        border-radius: 14px;
-        padding: 28px 26px;
+        border-radius: 14px !important;
         box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-        border: 1px solid #eef0f2;
     }
-    .card h3 {
+    .card-title {
         font-size: 18px;
         font-weight: 700;
         color: #1a1a2e;
-        margin-bottom: 18px;
+        margin-bottom: 10px;
         display: flex;
         align-items: center;
         gap: 8px;
@@ -135,7 +136,7 @@ st.markdown("""
 # ---------------- Hero Header ----------------
 st.markdown("""
     <div class="hero">
-        <h1>Titanic Survival Prediction</h1>
+        <h1>🚢 Titanic Survival Prediction</h1>
         <p>Enter passenger details to estimate the likelihood of survival, powered by a Decision Tree model.</p>
     </div>
 """, unsafe_allow_html=True)
@@ -144,69 +145,68 @@ st.markdown("""
 col1, col2 = st.columns([1, 1.4], gap="large")
 
 with col1:
-    st.markdown('<div class="card">', unsafe_allow_html=True)
-    st.markdown("### 🧍 Passenger Details", unsafe_allow_html=True)
+    with st.container(border=True):
+        st.markdown('<div class="card-title">🧍 Passenger Details</div>', unsafe_allow_html=True)
 
-    c1, c2 = st.columns(2)
-    with c1:
-        age = st.slider("Age", 0, 80, 25)
-        gender = st.selectbox("Gender", ["Male", "Female"])
-        pclass = st.selectbox("Ticket Class", ["High (1st)", "Mid (2nd)", "Low (3rd)"])
-        sibsp = st.number_input("Siblings/Spouses", 0, 10, 0)
-    with c2:
-        fare = st.number_input("Fare (Ticket Price)", 0, 512, 32)
-        embarked = st.selectbox("Port of Embarkation", ["Southampton", "Cherbourg", "Queenstown"])
-        has_cabin = st.radio("Has a Cabin?", ["Yes", "No"], horizontal=True)
-        parch = st.number_input("Parents/Children", 0, 10, 0)
+        c1, c2 = st.columns(2)
+        with c1:
+            age = st.slider("Age", 0, 80, 25)
+            gender = st.selectbox("Gender", ["Male", "Female"])
+            pclass = st.selectbox("Ticket Class", ["High (1st)", "Mid (2nd)", "Low (3rd)"])
+            sibsp = st.number_input("Siblings/Spouses", 0, 10, 0)
+        with c2:
+            fare = st.number_input("Fare (Ticket Price)", 0, 512, 32)
+            embarked = st.selectbox("Port of Embarkation", ["Southampton", "Cherbourg", "Queenstown"])
+            has_cabin = st.radio("Has a Cabin?", ["Yes", "No"], horizontal=True)
+            parch = st.number_input("Parents/Children", 0, 10, 0)
 
-    predict_clicked = st.button("Predict Survival", use_container_width=True, type="primary")
-    st.markdown('</div>', unsafe_allow_html=True)
+        predict_clicked = st.button("Predict Survival", use_container_width=True, type="primary")
 
 with col2:
-    st.markdown('<div class="card">', unsafe_allow_html=True)
-    st.markdown("### Prediction Result", unsafe_allow_html=True)
+    with st.container(border=True):
+        st.markdown('<div class="card-title">📊 Prediction Result</div>', unsafe_allow_html=True)
 
-    # Preprocessing
-    is_female = 1 if gender == "Female" else 0
-    cabin_encoded = 1 if has_cabin == "Yes" else 0
-    p_high = 1 if pclass == "High (1st)" else 0
-    p_mid = 1 if pclass == "Mid (2nd)" else 0
-    p_low = 1 if pclass == "Low (3rd)" else 0
-    emb_map = {"Cherbourg": 0, "Queenstown": 1, "Southampton": 2}
-    emb_encoded = emb_map[embarked]
+        # Preprocessing
+        is_female = 1 if gender == "Female" else 0
+        cabin_encoded = 1 if has_cabin == "Yes" else 0
+        p_high = 1 if pclass == "High (1st)" else 0
+        p_mid = 1 if pclass == "Mid (2nd)" else 0
+        p_low = 1 if pclass == "Low (3rd)" else 0
+        emb_map = {"Cherbourg": 0, "Queenstown": 1, "Southampton": 2}
+        emb_encoded = emb_map[embarked]
 
-    input_data = {'Age': age, 'has_cabin': cabin_encoded, 'Fare': fare, 'Pclass_High': p_high,
-                  'Pclass_Mid': p_mid, 'Pclass_Low': p_low, 'Embarked': emb_encoded,
-                  'SibSp': sibsp, 'Parch': parch, 'is_Female': is_female}
-    input_df = pd.DataFrame([input_data])
-    input_df[['Age', 'Fare']] = scaler.transform(input_df[['Age', 'Fare']])
-    input_df = input_df[columns]
+        input_data = {'Age': age, 'has_cabin': cabin_encoded, 'Fare': fare, 'Pclass_High': p_high,
+                      'Pclass_Mid': p_mid, 'Pclass_Low': p_low, 'Embarked': emb_encoded,
+                      'SibSp': sibsp, 'Parch': parch, 'is_Female': is_female}
+        input_df = pd.DataFrame([input_data])
+        input_df[['Age', 'Fare']] = scaler.transform(input_df[['Age', 'Fare']])
+        input_df = input_df[columns]
 
-    if predict_clicked:
-        prediction = model.predict(input_df)
-        survived = prediction[0] == 1
-        status = "SURVIVED" if survived else "NOT SURVIVED"
-        color = "#28a745" if survived else "#dc3545"
-        bg = "#eafaf0" if survived else "#fdecee"
-        icon = "" if survived else ""
+        if predict_clicked:
+            prediction = model.predict(input_df)
+            survived = prediction[0] == 1
+            status = "SURVIVED" if survived else "NOT SURVIVED"
+            color = "#28a745" if survived else "#dc3545"
+            bg = "#eafaf0" if survived else "#fdecee"
+            icon = "✅" if survived else "❌"
 
-        st.markdown(f"""
-            <div class="result-box" style="background-color: {bg};">
-                <div class="result-icon">{icon}</div>
-                <h1 style="color: {color};">{status}</h1>
-                <p>Based on the passenger profile provided</p>
-            </div>
-            """, unsafe_allow_html=True)
-    else:
+            st.markdown(f"""
+                <div class="result-box" style="background-color: {bg};">
+                    <div class="result-icon">{icon}</div>
+                    <h1 style="color: {color};">{status}</h1>
+                    <p>Based on the passenger profile provided</p>
+                </div>
+                """, unsafe_allow_html=True)
+        else:
+            st.markdown("""
+                <div class="placeholder">
+                    <div class="emoji">🧭</div>
+                    <p>Fill in the passenger details and click<br><b>Predict Survival</b> to see the result.</p>
+                </div>
+                """, unsafe_allow_html=True)
+
         st.markdown("""
-            <div class="placeholder">
-                <p>Fill in the passenger details and click<br><b>Predict Survival</b> to see the result.</p>
+            <div class="note">
+                ℹ️ This prediction is based on a Decision Tree model trained on the Titanic dataset.
             </div>
             """, unsafe_allow_html=True)
-
-    st.markdown("""
-        <div class="note">
-            This prediction is based on a Decision Tree model trained on the Titanic dataset.
-        </div>
-        """, unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
