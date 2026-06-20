@@ -144,7 +144,6 @@ st.markdown("""
 st.markdown("""
     <div class="hero">
         <h1>Titanic Survival Prediction</h1>
-        <p>Enter passenger details to estimate the likelihood of survival by using Decision Tree model.</p>
     </div>
 """, unsafe_allow_html=True)
 
