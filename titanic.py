@@ -29,7 +29,7 @@ st.markdown("""
     .hero {
         padding: 18px 0 6px 0;
         border-bottom: 1px solid #e6e8eb;
-        margin-bottom: 24px;
+        margin-bottom: 10px;
     }
     .hero {
         text-align: center;
